@@ -1,0 +1,30 @@
+[package]
+name = "pku-mpl"
+version = "0.1.0"
+entrypoint = "mplts.typ"
+authors = [
+  "Modern Phys. Lab, School of Phys., Peking Univ.",
+  "Song Xinjie <@xjsongphy>",
+]
+license = "CC-BY-SA-4.0"
+description = "Modern Physics Laboratory report template for Peking University (PKU)."
+repository = "https://github.com/xjsongphy/PKUMpLst"
+keywords = ["report", "laboratory", "pku", "peking-university", "physics", "revtex", "chinese"]
+categories = ["report"]
+disciplines = ["physics"]
+compiler = "0.13.0"
+exclude = [
+  "demo.typ",
+  "demo.pdf",
+  "fig",
+  "fig.mplstyle",
+  "figgen.py",
+  "images",
+  "CHANGELOG.md",
+  ".github",
+]
+
+[template]
+path = "template"
+entrypoint = "main.typ"
+thumbnail = "images/thumbnail.png"
