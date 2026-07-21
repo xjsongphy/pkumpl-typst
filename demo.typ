@@ -29,7 +29,7 @@
   date: [（实验日期: #releasedate）], // 正式报告请替换为具体日期
   abstract: [
     此部分为摘要. 200--300字, 说明用什么方法做了什么事, 由此得到什么结果和结论, 有何意义. 摘要中不用缩略词, 不用第一人称.
-    #note[本文档为对 #link("https://github.com/CastleStar14654/PKUMpLst")[PKUMpLst] (Typst 版) 的使用示例, 灰色部分为额外针对模板使用的说明或是一些能提升输出效果的琐碎细节. 也请注意查看源文档 #file("template.typ") 中的注释.]
+    #note[本文档为对 #link("https://github.com/CastleStar14654/PKUMpLst")[PKUMpLst] (Typst 版) 的使用示例, 灰色部分为额外针对模板使用的说明或是一些能提升输出效果的琐碎细节. 也请注意查看源文档 #file("demo.typ") 中的注释.]
   ],
   keywords: "关键词1, 关键词2, 共2--4个",
 )
