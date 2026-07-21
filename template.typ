@@ -16,7 +16,7 @@
 
 #let releasedate = link(
   "https://github.com/CastleStar14654/PKUMpLst/releases/tag/v0.1.0",
-  [2025-03-15, v0.1.0],
+  [2025/03/15, v2.1.6],
 )
 
 // ========== 标题区 ==========
@@ -25,8 +25,8 @@
   author: "姓名",
   email: "email@pku.edu.cn", // emailphone: 邮箱; 如只用邮箱可省略 phone
   phone: "(86)152XXXXXXXX",
-  affiliation: "北京大学物理学院\quad 学号: 20000xxxxx",
-  date: releasedate, // 正式报告请替换为具体日期, 如 "2020 年 12 月 1 日"
+  affiliation: [北京大学物理学院 #h(1em) 学号: 20000xxxxx],
+  date: [（实验日期: #releasedate）], // 正式报告请替换为具体日期
   abstract: [
     此部分为摘要. 200--300字, 说明用什么方法做了什么事, 由此得到什么结果和结论, 有何意义. 摘要中不用缩略词, 不用第一人称.
     #note[本文档为对 #link("https://github.com/CastleStar14654/PKUMpLst")[PKUMpLst] (Typst 版) 的使用示例, 灰色部分为额外针对模板使用的说明或是一些能提升输出效果的琐碎细节. 也请注意查看源文档 #file("template.typ") 中的注释.]
@@ -46,13 +46,15 @@
 = 理论 <sec:theory>
 
 可选, 概括本实验必须的理论. 也可以适当地给出必要的公式, 公式应编号.
-#note[自然对数的底、虚数单位以及圆周率国标 #cite(<GBT3102.11>) 和 ISO #cite(<ISO80000-2>) 都推荐为正体 (虽然国际学界并不怎么实行这点), 本模板提供了 `ii`, `ee`, `jj`, `uppi` 作为简写, 如]
+#note[
+  自然对数的底、虚数单位以及圆周率国标 #cite(<GBT3102.11>) 和 ISO #cite(<ISO80000-2>) 都推荐为正体 (虽然国际学界并不怎么实行这点), 本模板提供了 `ii`, `ee`, `jj`, `uppi` 作为简写, 如
 
-$ #ee^(#uppi #ii) + 1 = 0. $ <eq1>
+  $ #ee^(#ii#uppi) + 1 = 0. $ <eq1>
 
-#note[注意公式应作为句子的一部分在末尾给出必要的标点符号. 上式可以交叉引用为 式~@eq1.]
+  注意公式应作为句子的一部分在末尾给出必要的标点符号. 上式可以交叉引用为 @eq1.
+]
 
-#note[此外, 摄氏度和度可直接打出, 比如 ° (textdegree) 和 ℃ (textcelsius, 虽然国际计量局 #cite(<si>) 和 Unicode 联盟 #cite(<unicode>) 都更推荐使用 °C 的写法). 再比如, µ (textmu) 可以给出微米需要的正体词头符号. 你也可以使用 Typst 的单位语法 (如 `1m/s`, `9.8m/s^2`) 来帮助你管理单位格式.]
+#note[此外, 摄氏度和度可直接打出, 比如 #code("\\textdegree") (°) 和 #code("\\textcelsius") (℃, 虽然国际计量局 #cite(<si>) 和 Unicode 联盟 #cite(<unicode>) 都更推荐使用 °C 的写法). 再比如, #code("\\textmu") (µ) 可以给出微米需要的正体词头符号. 你也可以使用 #pkg("siunitx") 宏包 (参见 #file("README.md")) 来帮助你管理单位格式.]
 
 = 实验装置
 
@@ -79,24 +81,37 @@ $ #ee^(#uppi #ii) + 1 = 0. $ <eq1>
 
 == 表格 <ssec:table>
 
+=== 表格
+
 表是被一系列横线隔开的有序排列的数据, 报告格式要求最上和最下两条横线为双横线.
 #note[此双横线格式可以通过 `ruled-table` 函数实现.]
 例表为 @tab:table_eg.
 
 #figure(
   kind: table,
-  caption: [表格示例. 表格标题要简明扼要; 注意使用 `ruled-table` 生成首尾双横线的表格. 为方便, 提供了 `mc` 作为兼容别名.],
-  ruled-table(
-    table(
-      columns: 4,
-      align: (center, center, left, right),
-      [居中], [数值], [靠左], [靠右],
-      table.hline(stroke: 0.4pt),
-      [a], [0.12], [a], [a],
-      [bbb], [-100], [bbb], [bbb],
-      [ccccc], [50.8], [ccccc], [ccccc],
+  caption: [表格示例.],
+  block(width: 100%)[
+    #ruled-table(
+      table(
+        columns: (1fr, 1fr, 1fr, 1fr),
+        align: (center, center, left, right),
+        [居中], [数值], [靠左], [靠右],
+        table.hline(stroke: 0.4pt),
+        [a], [0.12], [a], [a],
+        [bbb], [-100], [bbb], [bbb],
+        [ccccc], [50.8], [ccccc], [ccccc],
+      )
     )
-  ),
+    #v(6pt)
+    #block(width: 100%)[
+      #align(left)[
+        #text(size: 11pt)[
+        ᵃ 表格标题要简明扼要; 注意使用 `ruled-table` 生成首尾双横线的表格. 表格中的脚注应作为表格的一部分放在表后. 为方便, 提供了 `mc` 作为兼容别名. #link("https://www.tablesgenerator.com")[Tables Generator 网站]可以方便地生成 Typst 表格. \
+        ᵇ 数值列应根据数据特点选择合适的对齐方式; 如需按小数点对齐, 可以手工设置各单元格的对齐方式. 若需更复杂的小数点对齐, 请参考相关工具文档.
+        ]
+      ]
+    ]
+  ],
 ) <tab:table_eg>
 
 从 @tab:table_eg 可以看出, 对表中各项的注释应作为表的一部分放在表后, 而不是页脚或文尾.
@@ -128,12 +143,15 @@ $ #ee^(#uppi #ii) + 1 = 0. $ <eq1>
 
 *文字写一段.* 首先要给出实验结果, 然后再给出由实验结果分析得到的结果和结论. 此部分给出的内容要比摘要中的全面, 用词要更准确.
 
+#pagebreak()
+
 #acknowledgments[
   感谢对实验和报告有具体重要帮助的, 又没被列为作者的人.
-  #note[撰写致谢时请使用 `acknowledgments` 函数.]
+  #note[撰写致谢时请使用 #text(style: "italic")[acknowledgments] 函数.]
 ]
 
-#bibliography("bibli.bib", title: "参考文献", style: "american-physics-society.csl")
+#bibliography-title[参考文献]
+#bibliography("bibli.bib", title: none, style: "american-physics-society.csl")
 
 #pagebreak()
 
@@ -154,7 +172,7 @@ $ #ee^(#uppi #ii) + 1 = 0. $ <eq1>
 
 本实验报告模板各部分的文字给出了相应节写作时应注意的问题.
 
-=== 报告写作的一般事项
+#heading(level: 2, numbering: none)[报告写作的一般事项]
 
 + 课程实验报告应假定读者既不是已知全部实验细节的指导教师, 也不是缺少专业知识的公众, 而是同领域的实验研究者, 或审稿人. 不能要求读者要在读过课程讲义后才能读懂课程实验报告.
 + 文本和物理量单位用正体, 物理变量符号用斜体, 矢量矩阵符号用黑斜体.
@@ -181,7 +199,7 @@ Typst 中对 dash 有所区分, 连字符用单个 `-` (如 `co-operate` → co-
   caption: none,
   ruled-table(
     table(
-      columns: 3,
+      columns: (1fr, 1fr, 1fr),
       align: center,
       [*类型*], [*输入*], [*输出*],
       table.hline(stroke: 0.4pt),
