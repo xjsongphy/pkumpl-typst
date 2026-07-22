@@ -46,7 +46,7 @@ typst compile demo.typ
 
 For live preview, `typst watch demo.typ`. All source files must be UTF-8 encoded.
 
-For repository maintenance, the optional [Just](https://just.systems/) command runner provides `just compile`, `just watch`, `just check-init`, `just thumbnail`, and `just publish`. The `check-init` recipe simulates a local Universe package and verifies that a fresh project compiles.
+For repository maintenance, the optional [Just](https://just.systems/) command runner provides `just compile`, `just watch`, `just check-init`, `just firstpage`, and `just publish`. The `check-init` recipe simulates a local Universe package and verifies that a fresh project compiles.
 
 ## Typst Quick Start
 

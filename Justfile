@@ -24,8 +24,8 @@ check-init:
     TYPST_PACKAGE_PATH="$package_path" typst compile "$project_root/main.typ" "$project_root/main.pdf"
     echo "Initialized template compiled successfully: $project_root/main.pdf"
 
-# Regenerate the Universe template thumbnail from the initialized template.
-thumbnail:
+# Regenerate the Universe template preview from the initialized first page.
+firstpage:
     #!/usr/bin/env bash
     set -euo pipefail
     package_path="$(mktemp -d)"

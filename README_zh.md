@@ -46,7 +46,7 @@ typst compile demo.typ
 
 如需实时预览，运行 `typst watch demo.typ`。所有源文件请用 UTF-8 保存。
 
-维护仓库时可选用 [Just](https://just.systems/) 命令运行器，提供 `just compile`、`just watch`、`just check-init`、`just thumbnail` 和 `just publish`。其中 `check-init` 会模拟本地 Universe 包，并验证新初始化的项目能够编译。
+维护仓库时可选用 [Just](https://just.systems/) 命令运行器，提供 `just compile`、`just watch`、`just check-init`、`just firstpage` 和 `just publish`。其中 `check-init` 会模拟本地 Universe 包，并验证新初始化的项目能够编译。
 
 ## Typst 快速入门
 
