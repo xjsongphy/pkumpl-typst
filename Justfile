@@ -35,8 +35,8 @@ thumbnail:
     cp typst.toml README.md README_zh.md LICENSE mplts.typ "$package_path/preview/unofficial-pku-mpl/0.1.0/"
     cp -R template images "$package_path/preview/unofficial-pku-mpl/0.1.0/"
     TYPST_PACKAGE_PATH="$package_path" typst init @preview/unofficial-pku-mpl:0.1.0 "$project_root"
-    TYPST_PACKAGE_PATH="$package_path" typst compile --format png --pages 1 --ppi 250 "$project_root/main.typ" images/thumbnail.png
-    echo "Regenerated images/thumbnail.png"
+    TYPST_PACKAGE_PATH="$package_path" typst compile --format png --pages 1 --ppi 250 "$project_root/main.typ" images/cover.png
+    echo "Regenerated images/cover.png"
 
 # Copy a release-ready package into a local checkout of typst/packages.
 publish:
