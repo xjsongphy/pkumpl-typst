@@ -16,7 +16,7 @@ English | [中文](./README_zh.md)
 
 ## Overview
 
-A Typst template for the *Modern Physics Laboratory* course at Peking University, ported from the LaTeX template [`PKUMpLtX`]. This project is an independent, unofficial Typst implementation; the original LaTeX project and its maintainers remain the source of the upstream design.
+A Typst template for the *Modern Physics Laboratory* course at Peking University, ported from the LaTeX template [`PKUMpLtX`]. This project is an independent, unofficial Typst implementation.
 
 ## Features
 
@@ -46,58 +46,21 @@ typst compile demo.typ
 
 For live preview, `typst watch demo.typ`. All source files must be UTF-8 encoded.
 
-For repository maintenance, the optional [Just](https://just.systems/) command runner provides `just compile`, `just watch`, `just check-init`, `just firstpage`, and `just publish`. The `check-init` recipe simulates a local Universe package and verifies that a fresh project compiles.
-
 ## Typst Quick Start
 
 New to Typst? Start with the official [Typst tutorial](https://typst.app/docs/tutorial/), or read the [Chinese Typst tutorial](https://typst.dev/docs/tutorial/). For agent-assisted Typst work, see the [Claude Typst skill](https://github.com/lucifer1004/claude-skill-typst).
-
-## Usage
-
-Import the package (or [`mplts.typ`] directly when working from a clone) at the top of your `*.typ` file:
-
-```typst
-#import "@preview/unofficial-pku-mpl:0.1.0": *
-// From a local clone instead: #import "mplts.typ": *
-
-#show: mplts.with(font: "macos")
-
-#frontmatter(
-  title: "Experiment Title",
-  author: "Your Name",
-  email: "email@pku.edu.cn",
-  phone: "(86)152XXXXXXXX",
-  affiliation: "School of Physics, Peking University",
-  date: "March 15, 2025",
-  abstract: [ ... ],
-  keywords: "keyword1, keyword2",
-)
-
-= Introduction
-...
-```
-
-See [`demo.typ`] for a full annotated example, or [`template/main.typ`](./template/main.typ) for the minimal `typst init` scaffold. Edit [`mplts.typ`] for deeper customization.
 
 ### Package structure
 
 The two Typst files have the following roles:
 
 - `mplts.typ` is the package entrypoint and contains the reusable layout, typography, numbering, figure/table, bibliography, and helper-function implementation.
-- `template/main.typ` is the initialized user document. It imports the published package and contains only report content plus usage examples; it does not duplicate the styling implementation.
+- `template/main.typ` is the initialized user document. It imports the published package and contains report content plus examples.
 - `template/bibli.bib` and `template/american-physics-society.csl` are copied into new projects.
-
-The package name is `unofficial-pku-mpl`. `unofficial` is a neutral, non-personal unique part and `pku-mpl` identifies the institution and course. The repository is `pkumpl-typst`, while the package name remains separate for Typst Universe publishing.
-
-Typst Universe distinguishes the published package from the initialized project: `mplts.typ` is the package entrypoint, while `template/main.typ` is copied into a new project by `typst init` and imports the published package with its absolute package path. In this repository, `demo.typ` is the full local-clone example and imports `mplts.typ` relatively.
-
-The official package guidance says: “In most cases, the template files should not include the styling code for the template. Instead, the template's entrypoint file should import a function from the package.” It also requires an absolute package-style import for an initialized template. See the [official package submission guidelines](https://github.com/typst/packages/blob/main/docs/README.md) and [manifest documentation](https://github.com/typst/packages/blob/main/docs/manifest.md#templates). There is no root-level `template.typ` in this repository; `template/main.typ` is the manifest-declared template entrypoint.
-
-`demo.typ` recommends sizing images relative to the current text area, for example at 0.8 times its width; vector images are recommended for apparatus and data figures. See Typst's [`image`] documentation.
 
 ### Font Options
 
-`font={macos|windows|noto|notofandol|fandol}` (default `macos`), matching the LaTeX presets:
+`font={macos|windows|noto|notofandol|fandol}` (default `macos`):
 
 |         | Roman  | Sans Serif | Monospace |
 | :-----: | :----: | :--------: | :-------: |
@@ -113,23 +76,6 @@ Latin text uses New Computer Modern. The package does not bundle fonts, as requi
 - `notofandol`: Noto Serif/Sans CJK SC plus FandolFang/FandolKai
 
 Use `noto` or `fandol` for a reproducible cross-platform setup. `macos` remains the default because it most closely matches the upstream LaTeX rendering on macOS. Run `typst fonts` to inspect the names visible to your Typst installation.
-
-### Punctuation
-
-The course requires half-width punctuation everywhere except the Chinese comma (顿号). To use full-width punctuation while auto-replacing `。` with `．`:
-
-```typst
-#show: mplts.with(font: "macos", quanjiao: true)
-```
-
-### Key Functions
-
-- `frontmatter(..)` — Title block (title/author/affiliation/date/abstract/keywords)
-- `note(it)` — Gray note (cf. `\note`)
-- `ii`, `ee`, `jj`, `uppi` — Upright `i`/`e`/`j`/π in math
-- `sans(it)`, `mono(it)` — Sans-serif / monospace text
-- `ruled-table(table(..))` — Double-ruled table (use `table.hline(stroke: 0.4pt)` for inner rules)
-- `acknowledgments[..]`, `bibliography-title[..]`, `start-appendix()` — Standard environments
 
 ## Feedback
 
@@ -176,8 +122,7 @@ remain subject to that upstream license and are not relicensed by this project's
 CC BY-SA 4.0 license.
 
 This project does not bundle Peking University logos, seals, fonts, or other
-official university brand assets. It is unofficial and is not affiliated with
-or endorsed by Peking University.
+official university brand assets.
 
 ## License
 
