@@ -1,21 +1,19 @@
-// PKUMpLst --- A Typst template for 'Modern Physics Laboratory' in PKU
+// pkumpl-typst --- A Typst template for 'Modern Physics Laboratory' in PKU
 //
 // 请阅读 `README.md`. 需要确保 font 选项指定的字体已安装! 参见 README.md.
+// 发布到 Typst Universe 后使用包入口:
+// #import "@preview/unofficial-pku-mpl:0.1.0": *
+// 从本地克隆使用: #import "mplts.typ": *
 #import "mplts.typ": *
 
 #show: mplts.with(font: "macos")
 
 // 以下仅为本文件方便额外定义的命令, 写报告时不需要.
-#let pkg(name, alt: none) = if alt != none {
-  link("https://www.ctan.org/pkg/" + alt, name)
-} else {
-  link("https://www.ctan.org/pkg/" + name, name)
-}
 #let code(it) = raw(it)
 #let file(it) = text(weight: "bold", raw(it))
 
 #let releasedate = link(
-  "https://github.com/CastleStar14654/PKUMpLst/releases/tag/v0.1.0",
+  "https://github.com/CastleStar14654/PKUMpLtX/releases/tag/v0.1.0",
   [2025/03/15, v2.1.6],
 )
 
@@ -29,7 +27,7 @@
   date: [（实验日期: #releasedate）], // 正式报告请替换为具体日期
   abstract: [
     此部分为摘要. 200--300字, 说明用什么方法做了什么事, 由此得到什么结果和结论, 有何意义. 摘要中不用缩略词, 不用第一人称.
-    #note[本文档为对 #link("https://github.com/CastleStar14654/PKUMpLst")[PKUMpLst] (Typst 版) 的使用示例, 灰色部分为额外针对模板使用的说明或是一些能提升输出效果的琐碎细节. 也请注意查看源文档 #file("demo.typ") 中的注释.]
+    #note[本文档为对 #link("https://github.com/CastleStar14654/PKUMpLtX")[PKUMpLtX] 的 Typst 移植版使用示例, 灰色部分为额外针对模板使用的说明或是一些能提升输出效果的琐碎细节. 也请注意查看源文档 #file("demo.typ") 中的注释.]
   ],
   keywords: "关键词1, 关键词2, 共2--4个",
 )
@@ -41,7 +39,7 @@
 
 引言撰写可以参考实验讲义和资料, 可以概括复述, 但不能抄.
 #note[这里是一个对实验教材 #cite(<jindaishiyan>) 的引用示例.]
-#note[注意在 `cite` 命令前后适当添加空格. 可以连续引用. 引用标记要出现在标点之前 #cite(<GBT7714>). 引用处理使用 Typst 内置的 Hayagriva + CSL. 对于外文期刊, `*.bib` 格式的引用数据很容易从出版商获得; #link("https://scholar.google.com")[Google 学术] 和 #link("https://xueshu.baidu.com")[百度学术] 等文献搜索引擎也提供以 `*.bib` 格式导出的功能. 这里是对首次探测到引力波的报道的引用 #cite(<PhysRevLett.116.061102>).]
+#note[注意在 `#cite(...)` 前后适当添加空格. 可以连续引用. 引用标记要出现在标点之前 #cite(<GBT7714>). 引用处理使用 Typst 内置的 Hayagriva + CSL. 对于外文期刊, `*.bib` 格式的引用数据很容易从出版商获得; #link("https://scholar.google.com")[Google 学术] 和 #link("https://xueshu.baidu.com")[百度学术] 等文献搜索引擎也提供以 `*.bib` 格式导出的功能. 这里是对首次探测到引力波的报道的引用 #cite(<PhysRevLett.116.061102>).]
 
 = 理论 <sec:theory>
 
@@ -54,7 +52,7 @@
   注意公式应作为句子的一部分在末尾给出必要的标点符号. 上式可以交叉引用为 @eq1.
 ]
 
-#note[此外, 摄氏度和度可直接打出, 比如 #code("\\textdegree") (°) 和 #code("\\textcelsius") (℃, 虽然国际计量局 #cite(<si>) 和 Unicode 联盟 #cite(<unicode>) 都更推荐使用 °C 的写法). 再比如, #code("\\textmu") (µ) 可以给出微米需要的正体词头符号. 你也可以使用 #pkg("siunitx") 宏包 (参见 #file("README.md")) 来帮助你管理单位格式.]
+#note[Typst 中摄氏度、度和微米词头可以直接输入 Unicode 字符, 例如 #code("°") (degree)、#code("℃") (Celsius) 和 #code("µ") (U+00B5 MICRO SIGN). 对 SI 单位, 推荐把单位作为正体文本输入, 例如 #code("1 m/s")、#code("9.8 m/s²") 和 #code("1 µm"), 不要把单位字母写成变量斜体. 如需自动管理单位, 应选择适合 Typst 的单位工具, 而不是直接套用 LaTeX 的 `siunitx`.]
 
 = 实验装置
 
@@ -65,10 +63,10 @@
 #figure(
   image("fig/instruments.png", width: 85%),
   caption: [这个例子展示了如何插入图片以及加说明文字.
-    #note[推荐使用相对大小插入图片, 比如这里是 0.8 倍当前区域文字宽度. 推荐对实验装置图和数据图使用矢量图插入.]],
+    #note[在 Typst 中推荐使用相对宽度插入图片, 例如 `image(..., width: 80%)`, 表示当前区域文字宽度的 0.8 倍. 实验装置图和数据图应尽量使用 SVG 或 PDF 等矢量图.]],
 ) <fig:instruments>
 
-#note[这里使用了 `@label` 命令来自动给出带类型的交叉引用, 注意在命令前后适当使用空格以给出最好的显示效果. 小节, 表格, 公式等都可如此引用, 如: @sec:theory, @ssec:table, @eq1, @tab:table_eg, @app:exercise. 交叉引用的标签尽量取得有意义.]
+#note[这里使用了 Typst 的 `@label` 引用语法来自动给出带类型的交叉引用, 注意在引用前后适当使用空格以给出最好的显示效果. 小节, 表格, 公式等都可如此引用, 如: @sec:theory, @ssec:table, @eq1, @tab:table_eg, @app:exercise. 交叉引用的标签尽量取得有意义.]
 
 实验仪器和方法不是像普物实验报告那样将所有实验器材列出, 而是要用介绍功用的方式成段给出. 实验条件不仅是指直接影响实验结果的实验参量, 而且还包括影响实验质量和可靠性的因素, 如室温、空气湿度、基真空、原材料纯度等.
 
@@ -130,6 +128,8 @@
   caption: [这是数据图的例子.
     #note[在图的标题中应简要说明图中表达的内容, 并对各种符号、线型、颜色的意义做出说明. 如果有多格数据图, 应清晰地分别做出解释说明. 图中的关键性文字 (比如轴名和图例) 的大小最好能和说明文字中的文字大小相当. 关于坐标轴名和单位的标法, 可以参看 #link("https://journals.aps.org/authors/axis-labels-and-scales-on-graphs-h18")[美国物理学会的说明]. 本图是用脚本 #file("figgen.py") 生成的.]],
 ) <fig:data>
+
+#after-figure
 
 @fig:data 是一张例图.
 

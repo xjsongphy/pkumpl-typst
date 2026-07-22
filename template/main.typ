@@ -1,7 +1,7 @@
-// PKUMpLst 初始化模板 — `typst init @preview/pku-mpl` 后即得到本文件.
+// pkumpl-typst 初始化模板 — `typst init @preview/unofficial-pku-mpl:0.1.0` 后即得到本文件.
 // 请阅读仓库 README. 需确保 font 选项指定的字体已安装 (默认 macos).
 
-#import "@preview/pku-mpl:0.1.0": *
+#import "@preview/unofficial-pku-mpl:0.1.0": *
 
 #show: mplts.with(font: "macos")
 

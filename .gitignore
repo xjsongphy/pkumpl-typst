@@ -1,9 +1,12 @@
-# Typst 编译产物
-!fig/**
-# 备份与临时文件
-*.tmp
-tmp/
-*~
 .DS_Store
-# 图标缓存
-*.gz
+tmp/
+*.log
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.run.xml
+*.synctex.gz
