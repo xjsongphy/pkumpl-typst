@@ -1,7 +1,7 @@
-// PKUMpLst --- A Typst template for 'Modern Physics Laboratory' in PKU
+// unofficial-pku-mpl --- A Typst template for 'Modern Physics Laboratory' in PKU
 //
 // 本文件是 PKUMpLtX (mpltx.cls, 基于 revtex4-2) 的 Typst 移植.
-// 请阅读 `README.md` 与 `template.typ` 后使用.
+// 请阅读 `README.md` 与 `template/main.typ` 后使用.
 //
 // Copyright (C) 2013--2025. Modern Phys. Lab, School of Phys., Peking Univ.
 // 基于 PKUMpLtX (Lin Xuchen <linxc@pku.edu.cn> 等) 的工作, 以 CC BY-SA 4.0 许可.
@@ -23,13 +23,13 @@
   ),
   noto: (
     main: ("New Computer Modern", "Noto Serif CJK SC"),
-    bold-main: ("New Computer Modern", "Noto Serif CJK SC Bold"),
+    bold-main: ("New Computer Modern", "Noto Serif CJK SC Bold", "Noto Serif CJK SC"),
     sans: ("New Computer Modern", "Noto Sans CJK SC"),
-    mono: ("STFangsong",),
-    main-italic: ("STFangsong",),
-    bold-main-italic: ("STFangsong",),
-    sans-italic: ("Kaiti SC",),
-    mono-italic: ("Kaiti SC",),
+    mono: ("Noto Serif CJK SC",),
+    main-italic: ("Noto Serif CJK SC",),
+    bold-main-italic: ("Noto Serif CJK SC",),
+    sans-italic: ("Noto Sans CJK SC",),
+    mono-italic: ("Noto Serif CJK SC",),
   ),
   fandol: (
     main: ("New Computer Modern", "FandolSong"),
@@ -41,12 +41,36 @@
     sans-italic: ("FandolKai",),
     mono-italic: ("FandolKai",),
   ),
+  notofandol: (
+    main: ("New Computer Modern", "Noto Serif CJK SC"),
+    bold-main: ("New Computer Modern", "Noto Serif CJK SC Bold", "Noto Serif CJK SC"),
+    sans: ("New Computer Modern", "Noto Sans CJK SC"),
+    mono: ("FandolFang",),
+    main-italic: ("FandolFang",),
+    bold-main-italic: ("FandolFang",),
+    sans-italic: ("FandolKai",),
+    mono-italic: ("FandolKai",),
+  ),
+  windows: (
+    main: ("New Computer Modern", "SimSun", "STSong"),
+    bold-main: ("New Computer Modern", "SimSun", "STSong"),
+    sans: ("New Computer Modern", "Microsoft YaHei", "DengXian"),
+    mono: ("FangSong", "STFangsong"),
+    main-italic: ("FangSong", "STFangsong"),
+    bold-main-italic: ("FangSong", "STFangsong"),
+    sans-italic: ("KaiTi", "STKaiti"),
+    mono-italic: ("KaiTi", "STKaiti"),
+  ),
 )
 
 #let _pick-font(font) = {
   if font in _fontsets { _fontsets.at(font) }
   else { _fontsets.macos } // 未知字体回退到 macos
 }
+
+// 当前文档使用的字体配置。这样 sans()/mono() 会跟随 mplts(font: ...),
+// 不会在用户选择 noto/fandol/windows 时仍然偷偷使用 macOS 字体。
+#let _active-fonts = state("mplts-fonts", _fontsets.macos)
 
 #let _appendix-mode = state("mplts-appendix", false)
 
@@ -82,6 +106,7 @@
 // 用法: #show: mplts.with(font: "macos")
 #let mplts(doc, font: "macos", quanjiao: false) = {
   let fs = _pick-font(font)
+  _active-fonts.update(fs)
 
   // ----- 页面几何 (geometry: hmargin=2.5cm, top=2cm, bottom=1.6cm, includefoot) -----
   set page(
@@ -118,6 +143,7 @@
     leading: 1.1em,
     justify: true,
     first-line-indent: 2em,
+    // 与 1.1em leading 合计为约 2em，使段间基线距离与段内行距一致。
     spacing: 0.9em,
   )
   // 全角句点映射 (quanjiao 选项: 。→ ．)
@@ -172,11 +198,12 @@
   // 图表本地化前缀: 图 / 表
   set figure(supplement: "图")
   show figure.where(kind: table): set figure(supplement: "表")
-  // LaTeX 的 figure/table 默认会在页顶或页底浮动；页顶放置最接近源模板。
-  set figure(placement: top, gap: 10pt)
+  // 不全局强制页顶浮动：否则初始化模板中的首个 figure 会跑到标题区之前。
+  // Typst 默认按源文档位置排版；需要浮动时，用户可在具体 figure 上指定 placement。
+  set figure(gap: 10pt)
   // 表格标题置于上方 (revtex 表标题在上, 图标题在下)
   show figure.where(kind: table): set figure.caption(position: top)
-  // 标题格式: "图 1. caption". LaTeX 版短标题居中，长标题左对齐。
+  // 标题格式: "图 1. caption". 图题和表题均居中对齐。
   show figure.caption: it => {
     let body = if it.kind == table {
       [表 #it.counter.display(it.numbering). #h(0.5em) #it.body]
@@ -186,7 +213,7 @@
     if it.kind == table {
       align(center, text(size: 11pt)[#body])
     } else {
-      align(left, text(size: 11pt)[#body])
+      align(center, text(size: 11pt)[#body])
     }
   }
 
@@ -232,7 +259,9 @@
     ]
   ]
   // 摘要: 收窄到 400pt, 首行空两格, 两端对齐
-  v(5.5pt)
+  // 与 LaTeX 的 5.5pt preabstract space 对齐；Typst block 的字体盒高度与
+  // TeX minipage 不同，视觉基线需要少量补偿。
+  v(3pt)
   // 页面正文宽度为 16cm，左右各留约 26.77pt 后得到 LaTeX 的 400pt 摘要宽度。
   // 这里不使用外层 align(center)，避免摘要文字继承居中对齐。
   block(width: 100%)[
@@ -240,15 +269,17 @@
       #block(width: 400pt)[
         #set align(left)
         #set text(size: 11pt)
-        // revtex 的 \small 为 11pt/14.5pt；正文全局行距不能直接沿用到摘要。
-        #set par(justify: true, first-line-indent: 0em, leading: 0.5em, spacing: 0pt)
+        // mpltx.cls 将摘要设为 11pt/13pt，并通过 \linespread{1.3} 得到约 16.9pt
+        // 的实际基线间距；这里直接设置等效 leading，而不是沿用正文行距。
+        #set par(justify: true, first-line-indent: 0em, leading: 0.85em, spacing: 0pt)
         #h(2em)
         #abstract
       ]
     ]
   ]
   // 关键词: 加粗 "关键词:"
-  v(6.5pt)
+  // 与 LaTeX 的 6.5pt postabstract space 对齐。
+  v(4.5pt)
   align(center)[
     #block(width: 400pt)[
       #align(left)[
@@ -263,6 +294,10 @@
 }
 
 // ========== 工具函数 (对应模板新定义的命令) ==========
+
+// 图表后的第一段正文。Typst 不会自动缩进紧跟在块元素后的首段；
+// 定义成内容值而不是内容函数，确保它在图后作为独立元素展开。
+#let after-figure = [#h(2em) #parbreak()]
 
 // \note: 灰色注释
 #let note(it) = {
@@ -281,8 +316,8 @@
 #let uppi = math.upright("π")
 
 // sans / mono 文本快捷函数 (对应 \textsf / \texttt)
-#let sans(it) = text(font: _fontsets.macos.sans, it)
-#let mono(it) = text(font: _fontsets.macos.mono, it)
+#let sans(it) = context text(font: _active-fonts.get().sans, it)
+#let mono(it) = context text(font: _active-fonts.get().mono, it)
 
 // \mc: multicolumn 简写 (Typst 表格中无需, 提供为兼容别名, 直接返回内容)
 #let mc(it) = it
@@ -298,7 +333,7 @@
 ]
 
 // ruled-table: 包裹一个标准 Typst table, 生成首尾双横线 (对应 ruledtabular 环境).
-// 用法见 template.typ. 表内中部横线请在 table 中用 table.hline(stroke: 0.4pt) 给出.
+// 用法见 template/main.typ. 表内中部横线请在 table 中用 table.hline(stroke: 0.4pt) 给出.
 #let ruled-table(it) = block(width: 100%, spacing: 0pt)[
   #_double-rule
   #v(3pt)
@@ -314,7 +349,12 @@
   v(0.8cm)
   text(weight: "bold", size: 11pt)[致谢]
   v(0.5cm)
-  body
+  block(width: 100%)[
+    #set text(size: 12pt, style: "normal")
+    #set par(first-line-indent: 2em)
+    #h(2em)
+    #body
+  ]
 }
 
 // 参考文献标题在 revtex4-2 中居中，条目由 Typst 的 bibliography 负责排版。
