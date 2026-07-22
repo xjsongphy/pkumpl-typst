@@ -24,7 +24,6 @@ exclude = [
   "Justfile",
   ".gitignore",
   "tmp",
-  ".github",
 ]
 
 [template]

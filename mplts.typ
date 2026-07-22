@@ -3,7 +3,7 @@
 // 本文件是 PKUMpLtX (mpltx.cls, 基于 revtex4-2) 的 Typst 移植.
 // 请阅读 `README.md` 与 `template/main.typ` 后使用.
 //
-// Copyright (C) 2013--2025. Modern Phys. Lab, School of Phys., Peking Univ.
+// Copyright (C) 2013--2026. Modern Phys. Lab, School of Phys., Peking Univ.
 // 基于 PKUMpLtX (Lin Xuchen <linxc@pku.edu.cn> 等) 的工作, 以 CC BY-SA 4.0 许可.
 
 // ========== 字体配置 ==========
