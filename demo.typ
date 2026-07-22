@@ -52,7 +52,7 @@
   注意公式应作为句子的一部分在末尾给出必要的标点符号. 上式可以交叉引用为 @eq1.
 ]
 
-#note[Typst 中摄氏度、度和微米词头可以直接输入 Unicode 字符, 例如 #code("°") (degree)、#code("℃") (Celsius) 和 #code("µ") (U+00B5 MICRO SIGN). 对 SI 单位, 推荐把单位作为正体文本输入, 例如 #code("1 m/s")、#code("9.8 m/s²") 和 #code("1 µm"), 不要把单位字母写成变量斜体. 如需自动管理单位, 应选择适合 Typst 的单位工具, 而不是直接套用 LaTeX 的 `siunitx`.]
+#note[摄氏度、度和微米等符号可直接输入, 例如 #code("°C")、#code("℃") 和 #code("µm"). 物理量的单位使用正体, 物理量符号使用斜体, 例如 #code("1 m/s")、#code("9.8 m/s²") 和 #code("1 µm").]
 
 = 实验装置
 
@@ -63,7 +63,7 @@
 #figure(
   image("fig/instruments.png", width: 85%),
   caption: [这个例子展示了如何插入图片以及加说明文字.
-    #note[在 Typst 中推荐使用相对宽度插入图片, 例如 `image(..., width: 80%)`, 表示当前区域文字宽度的 0.8 倍. 实验装置图和数据图应尽量使用 SVG 或 PDF 等矢量图.]],
+    #note[推荐使用相对大小插入图片, 比如设置为 0.8 倍当前区域文字宽度. 推荐对实验装置图和数据图使用矢量图插入.]],
 ) <fig:instruments>
 
 #note[这里使用了 Typst 的 `@label` 引用语法来自动给出带类型的交叉引用, 注意在引用前后适当使用空格以给出最好的显示效果. 小节, 表格, 公式等都可如此引用, 如: @sec:theory, @ssec:table, @eq1, @tab:table_eg, @app:exercise. 交叉引用的标签尽量取得有意义.]
@@ -103,6 +103,7 @@
     #v(6pt)
     #block(width: 100%)[
       #align(left)[
+        #set par(first-line-indent: 0em, spacing: 0pt)
         #text(size: 11pt)[
         ᵃ 表格标题要简明扼要; 注意使用 `ruled-table` 生成首尾双横线的表格. 表格中的脚注应作为表格的一部分放在表后. 为方便, 提供了 `mc` 作为兼容别名. #link("https://www.tablesgenerator.com")[Tables Generator 网站]可以方便地生成 Typst 表格. \
         ᵇ 数值列应根据数据特点选择合适的对齐方式; 如需按小数点对齐, 可以手工设置各单元格的对齐方式. 若需更复杂的小数点对齐, 请参考相关工具文档.
@@ -128,8 +129,6 @@
   caption: [这是数据图的例子.
     #note[在图的标题中应简要说明图中表达的内容, 并对各种符号、线型、颜色的意义做出说明. 如果有多格数据图, 应清晰地分别做出解释说明. 图中的关键性文字 (比如轴名和图例) 的大小最好能和说明文字中的文字大小相当. 关于坐标轴名和单位的标法, 可以参看 #link("https://journals.aps.org/authors/axis-labels-and-scales-on-graphs-h18")[美国物理学会的说明]. 本图是用脚本 #file("figgen.py") 生成的.]],
 ) <fig:data>
-
-#after-figure
 
 @fig:data 是一张例图.
 

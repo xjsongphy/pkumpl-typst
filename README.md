@@ -81,19 +81,19 @@ See [`demo.typ`] for a full annotated example, or [`template/main.typ`](./templa
 
 ### Package structure
 
-The two Typst files have intentionally different roles:
+The two Typst files have the following roles:
 
 - `mplts.typ` is the package entrypoint and contains the reusable layout, typography, numbering, figure/table, bibliography, and helper-function implementation.
 - `template/main.typ` is the initialized user document. It imports the published package and contains only report content plus usage examples; it does not duplicate the styling implementation.
-- `template/bibli.bib` and `template/american-physics-society.csl` are copied into new projects so the initialized example compiles without extra files.
+- `template/bibli.bib` and `template/american-physics-society.csl` are copied into new projects.
 
 The package name is `unofficial-pku-mpl`. `unofficial` is a neutral, non-personal unique part and `pku-mpl` identifies the institution and course. The repository is `pkumpl-typst`, while the package name remains separate for Typst Universe publishing.
 
-Typst Universe distinguishes the published package from the initialized project: `mplts.typ` is the package entrypoint, while `template/main.typ` is copied into a new project by `typst init` and imports the published package with its absolute package path. In this repository, `demo.typ` is the full local-clone example and therefore imports `mplts.typ` relatively.
+Typst Universe distinguishes the published package from the initialized project: `mplts.typ` is the package entrypoint, while `template/main.typ` is copied into a new project by `typst init` and imports the published package with its absolute package path. In this repository, `demo.typ` is the full local-clone example and imports `mplts.typ` relatively.
 
 The official package guidance says: “In most cases, the template files should not include the styling code for the template. Instead, the template's entrypoint file should import a function from the package.” It also requires an absolute package-style import for an initialized template. See the [official package submission guidelines](https://github.com/typst/packages/blob/main/docs/README.md) and [manifest documentation](https://github.com/typst/packages/blob/main/docs/manifest.md#templates). There is no root-level `template.typ` in this repository; `template/main.typ` is the manifest-declared template entrypoint.
 
-The image advice in `demo.typ` is Typst-specific: `image(..., width: 80%)` uses a percentage relative to the containing text area. SVG and PDF are recommended vector formats for apparatus and data figures because they preserve line and text sharpness when scaled. See Typst's [`image`] documentation for the width behavior.
+`demo.typ` recommends sizing images relative to the current text area, for example at 0.8 times its width; vector images are recommended for apparatus and data figures. See Typst's [`image`] documentation.
 
 ### Font Options
 

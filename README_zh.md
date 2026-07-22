@@ -81,19 +81,19 @@ typst compile demo.typ
 
 ### 包结构
 
-这两个 Typst 文件的职责是有意分开的：
+两个 Typst 文件的职责如下：
 
 - `mplts.typ` 是包入口，包含可复用的版式、字体、编号、图表、参考文献和工具函数实现。
 - `template/main.typ` 是初始化后得到的用户文档，只负责导入已发布的包并提供报告正文示例，不重复实现样式。
-- `template/bibli.bib` 与 `template/american-physics-society.csl` 会随初始化复制到用户项目，使示例不依赖额外文件即可编译。
+- `template/bibli.bib` 与 `template/american-physics-society.csl` 会随初始化复制到用户项目。
 
 包名改为 `unofficial-pku-mpl`。其中 `unofficial` 是中性的、与个人无关的唯一部分，`pku-mpl` 表明机构和课程。远程仓库名为 `pkumpl-typst`；包名和仓库名在 Typst Universe 发布中彼此独立。
 
-Typst Universe 区分“发布的包”和“初始化后的项目”：`mplts.typ` 是包入口；运行 `typst init` 时，`template/main.typ` 会被复制到新项目，并通过绝对包路径导入已发布的包。本仓库中的 `demo.typ` 是完整的本地克隆示例，因此使用相对路径导入 `mplts.typ`。
+Typst Universe 区分“发布的包”和“初始化后的项目”：`mplts.typ` 是包入口；运行 `typst init` 时，`template/main.typ` 会被复制到新项目，并通过绝对包路径导入已发布的包。本仓库中的 `demo.typ` 是完整的本地克隆示例，使用相对路径导入 `mplts.typ`。
 
 官方发布指南的原文是：“In most cases, the template files should not include the styling code for the template. Instead, the template's entrypoint file should import a function from the package.” 同时，初始化模板必须使用绝对包路径导入。详见 [官方发布指南](https://github.com/typst/packages/blob/main/docs/README.md) 与 [manifest 文档](https://github.com/typst/packages/blob/main/docs/manifest.md#templates)。本仓库没有根目录 `template.typ`；manifest 声明的模板入口是 `template/main.typ`。
 
-`demo.typ` 中的插图提示是 Typst 的用法：`image(..., width: 80%)` 中的百分比相对于当前包含它的文字区域宽度计算。实验装置图和数据图推荐使用 SVG、PDF 等矢量格式，以便缩放后仍保持线条和文字清晰。宽度行为可参见 Typst 的 [`image`] 文档。
+`demo.typ` 中推荐使用相对大小插入图片，比如设置为 0.8 倍当前区域文字宽度；实验装置图和数据图推荐使用矢量图插入。详见 Typst 的 [`image`] 文档。
 
 ### 字体选项
 

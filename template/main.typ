@@ -36,7 +36,8 @@ $ #ee^(#ii#uppi) + 1 = 0. $ <eq1>
 
 成段介绍实验方法和条件 (不是罗列操作步骤), 交待清楚到别人能重复你的实验结果的程度.
 
-// 推荐用相对宽度插入矢量图: image("fig/...", width: 80%)
+// 推荐使用相对大小插入图片, 比如这里是 0.8 倍当前区域文字宽度.
+// 推荐对实验装置图和数据图使用矢量图插入.
 #figure(
   rect(width: 80%, stroke: (paint: luma(180), dash: "dashed"), height: 5cm)[
     #align(center + horizon)[在此插入实验装置示意图]
