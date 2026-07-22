@@ -53,7 +53,7 @@
 ]
 
 #note[
-  希腊字母在数学模式中可以直接按名称输入, 例如 #code("$ mu $") ($mu$)、#code("$ alpha $") ($alpha$) 和 #code("$ pi $") ($pi$); 普通文本中则可以写作 #code("#sym.mu") (#sym.mu). 度符号可以写作 #code("#sym.degree") (#sym.degree), 因此摄氏度和微米可分别写成 #code("#sym.degree#text(\"C\")") (#sym.degree#text("C")) 和 #code("#sym.mu#text(\"m\")") (#sym.mu#text("m")). 这些写法不需要输入难以键入的 Unicode 字符.
+  希腊字母在数学模式中可以直接按名称输入, 例如 #code("$ mu $") ($mu$)、#code("$ alpha $") ($alpha$) 和 #code("$ pi $") ($pi$); 普通文本中则可以写作 #code("#sym.mu") (#sym.mu). 度符号可以写作 #code("#sym.degree") (#sym.degree), 因此摄氏度和微米可分别写成 #code("#sym.degree#text(\"C\")") (#sym.degree#text("C")) 和 #code("#sym.mu#text(\"m\")") (#sym.mu#text("m")).
 
   物理量的单位使用正体, 物理量符号使用斜体, 例如 #code("$ 1 \"m/s\" $") ($1 "m/s"$)、#code("$ 9.8 \"m/s\"^2 $") ($9.8 "m/s"^2$) 和 #code("#sym.mu#text(\"m\")") (#sym.mu#text("m")). 最简单的做法是把单位写在数学模式之外; 如果必须在数学公式中输入单位, 可使用数学模式的字符串, 例如 #code("$ 9.8 \"m/s\"^2 $") ($9.8 "m/s"^2$). 普通文本中的上标可以使用 #code("#super[2]") (#super[2]).
 ]
