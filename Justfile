@@ -28,6 +28,8 @@ check-init:
 check-release:
     #!/usr/bin/env bash
     set -euo pipefail
+    name="$(awk -F'"' '/^name/ {print $2; exit}' typst.toml)"
+    version="$(awk -F'"' '/^version/ {print $2; exit}' typst.toml)"
     for required in README.md LICENSE mplts.typ template/main.typ template/bibli.bib template/american-physics-society.csl images/firstpage.png; do
         test -e "$required" || { echo "Missing release file: $required" >&2; exit 1; }
     done
@@ -41,6 +43,18 @@ check-release:
     while IFS= read -r link; do
         test -e "$link" || { echo "README link target is missing: $link" >&2; exit 1; }
     done < <(rg -o '\]\(\./[^)#]+' README.md | sed 's/^](//')
+    for doc in README.md template/main.typ; do
+        if rg -n --fixed-strings "@preview/$name:" "$doc" | rg -v --fixed-strings "@preview/$name:$version" >/dev/null; then
+            echo "Stale package version reference found in $doc (expected $version)." >&2
+            exit 1
+        fi
+    done
+    license="$(awk -F'"' '/^license/ {print $2; exit}' typst.toml)"
+    case "$license" in
+        CC-*|CC0-*)
+            echo "Notice: $license is allowed by Typst's licensing policy but may be flagged by the current OSI-only package checker." >&2
+            ;;
+    esac
     just check-init >/dev/null
     echo "Release package checks passed."
 
