@@ -12,6 +12,7 @@
 #let _fontsets = (
   macos: (
     main: ("New Computer Modern", "Songti SC"),
+    // Typst 通过同一字体族的 bold 字重选择 Songti SC Bold 字形。
     bold-main: ("New Computer Modern", "Songti SC"),
     sans: ("New Computer Modern", "PingFang SC"),
     mono: ("STFangsong",),
@@ -68,8 +69,7 @@
   else { _fontsets.macos } // 未知字体回退到 macos
 }
 
-// 当前文档使用的字体配置。这样 sans()/mono() 会跟随 mplts(font: ...),
-// 不会在用户选择 noto/fandol/windows 时仍然偷偷使用 macOS 字体。
+// 当前文档使用的字体配置，供 sans()/mono() 等快捷函数使用。
 #let _active-fonts = state("mplts-fonts", _fontsets.macos)
 
 #let _appendix-mode = state("mplts-appendix", false)
@@ -119,13 +119,11 @@
   set text(
     size: 12pt,
     font: fs.main,
+    weight: 300,
   )
-  // macOS 的 LaTeX 版使用 Songti regular；Typst 这里明确使用 Light，避免
-  // 普通正文视觉上过重。粗体使用 Black/最重字重，拉开与正文的层次。
-  show text.where(weight: "regular"): set text(font: fs.main, weight: 300)
-  // 粗体: 对应 xeCJK 的 BoldFont; 不能继续使用正文字体, 否则 Typst 的
-  // weight 标记存在但实际字形仍然是常规字重.
-  show text.where(weight: "bold"): set text(font: fs.bold-main, weight: 800)
+  // 将常规字重直接设在文档默认值上，避免 show 规则覆盖用户在局部
+  // `text(font: ...)` 中指定的字体。粗体交给当前字体族的 bold 字形。
+  show text.where(weight: "bold"): set text(weight: 700)
   // 斜体: xeCJK ItalicFont
   show text.where(style: "italic"): set text(font: fs.main-italic)
   show text.where(style: "italic", weight: "bold"): set text(font: fs.bold-main-italic)
@@ -140,12 +138,18 @@
 
   // ----- 段落 (linespread 1.3, 首段缩进 2em, 两端对齐) -----
   set par(
-    leading: 1.1em,
+    // Typst 的 leading 是同一段相邻行文字框之间的间距；对应 LaTeX
+    // 的 \\linespread{1.3}，按实际 PDF 基线距离取中等 leading。
+    leading: 0.8em,
     justify: true,
-    first-line-indent: 2em,
-    // 与 1.1em leading 合计为约 2em，使段间基线距离与段内行距一致。
+    first-line-indent: (amount: 2em, all: true),
+    // revtex 段落之间的竖直胶水略大于行内的 leading。Typst 的 spacing
+    // 是额外的段间距离，须显式设得稍大，不能让相邻段落看成同一段。
     spacing: 0.9em,
   )
+  // 按实际字框校准 revtex 的 enumerate：编号相对正文右移约 1em，
+  // 其后正文保持紧凑的悬挂缩进，换行时与首行文字对齐。
+  set enum(indent: 1.25em, body-indent: 0.55em)
   // 全角句点映射 (quanjiao 选项: 。→ ．)
   if quanjiao {
     show "。": "．"
@@ -158,37 +162,48 @@
   // 交叉引用前缀本地化: \sectionautorefname = 小节
   set heading(supplement: "小节")
 
+  // revtex 的 heading 实际上带有首行缩进；编号与正文之间只有一个较窄的
+  // 编号栏。下面的尺寸按编译后的 PDF 基线和字框校准，不直接把 LaTeX
+  // 的 glue 数值机械换算成 Typst 的 block 参数。
+  // LaTeX 的标题前留白大于标题后的留白；后方间距保持原模板节奏。
+  let heading-above = 1.3cm
+  let heading-below = 1.0cm
+  // 2em 是正文首行缩进；标题编号字形自身有左侧字面留白，
+  // 因而标题盒子需略微回退，才能和 PDF 中正文首行的可见起点对齐。
+  let heading-indent = 1.75em
+  let heading-number-width = 1.5em
+
   show heading.where(level: 1): it => {
-    block(above: 0.8cm, below: 0.5cm, breakable: false)[
+    // revtex 的 section 与首行正文同起点，而不是贴页面文字边界。
+    block(inset: (left: 1.4em), above: heading-above, below: heading-below, breakable: false)[
       #set text(weight: "bold", size: 11pt)
       #if it.numbering != none {
         context [#_heading-number(it) #h(1em)]
       }
       #it.body
     ]
-    // revtex 加载 indentfirst, 因而标题后的首段也缩进 2em. Typst 默认不缩进
-    // heading 后的首段, 这里用一个空的水平盒子补回该行为.
-    h(2em)
   }
   show heading.where(level: 2): it => {
-    block(inset: (left: 2em), above: 0.8cm, below: 0.5cm, breakable: false)[
+    block(inset: (left: heading-indent), above: heading-above, below: heading-below, breakable: false)[
       #set text(weight: "bold", size: 11pt)
-      #if it.numbering != none {
-        context [#_heading-number(it) #h(1em)]
-      }
+      // 无编号小节 (\subsection*) 不保留空的编号栏，否则其标题会被
+      // 额外右推一个编号宽度，无法与 LaTeX 的标题起点对齐。
+      #if it.numbering != none [
+        #box(width: heading-number-width)[#context [#_heading-number(it)]]
+      ]
       #it.body
     ]
-    h(2em)
   }
   show heading.where(level: 3): it => {
-    block(inset: (left: 2em), above: 0.8cm, below: 0.5cm, breakable: false)[
+    // Typst 三级标题自身还有约 0.25em 的层级偏移，因此补回这部分，
+    // 使 A. 与 1. 两级标题的正文起点一致。
+    block(inset: (left: heading-indent + 0.25em), above: heading-above, below: heading-below, breakable: false)[
       #set text(style: "italic", size: 11pt)
-      #if it.numbering != none {
-        context [#_heading-number(it) #h(1em)]
-      }
+      #box(width: heading-number-width)[
+        #if it.numbering != none { context [#_heading-number(it)] }
+      ]
       #it.body
     ]
-    h(2em)
   }
 
   // ----- 公式编号 (1), 交叉引用 "式 (1)" -----
@@ -203,18 +218,22 @@
   set figure(gap: 10pt)
   // 表格标题置于上方 (revtex 表标题在上, 图标题在下)
   show figure.where(kind: table): set figure.caption(position: top)
-  // 标题格式: "图 1. caption". 图题和表题均居中对齐。
+  // 标题格式: "图 1. caption"。图题/表题整体居中，且不继承正文首行缩进。
   show figure.caption: it => {
     let body = if it.kind == table {
       [表 #it.counter.display(it.numbering). #h(0.5em) #it.body]
     } else {
       [图 #it.counter.display(it.numbering). #h(0.5em) #it.body]
     }
-    if it.kind == table {
-      align(center, text(size: 11pt)[#body])
-    } else {
-      align(center, text(size: 11pt)[#body])
-    }
+    // caption 内容本身是 inline content；用 width:auto 的 box 让它按内容
+    // 收缩，再由外层 align 居中。若直接放一个 100% block，外层没有可居中
+    // 的剩余空间；若直接 align(text)，多行又会逐行居中。
+    align(center)[
+      #box(width: auto)[
+        #set align(left)
+        #text(size: 11pt)[#body]
+      ]
+    ]
   }
 
   // ----- 参考文献标题本地化 (由 template 中 #bibliography 给出 title:"参考文献") -----
@@ -295,17 +314,13 @@
 
 // ========== 工具函数 (对应模板新定义的命令) ==========
 
-// 图表后的第一段正文。Typst 不会自动缩进紧跟在块元素后的首段；
-// 定义成内容值而不是内容函数，确保它在图后作为独立元素展开。
-#let after-figure = [#h(2em) #parbreak()]
-
 // \note: 灰色注释
 #let note(it) = {
-  // set text 会作用于普通文本和行内数学；display equation 是独立元素，
-  // 因而需要额外设定其文字颜色，才能和 LaTeX 的 {\\color{gray}...} 一致。
-  set text(fill: gray)
+  // note 是行内说明，不应因为函数体中的 set/show 规则被提升成独立块。
+  // 用 inline text 容器保持它与前后正文处在同一段；display equation
+  // 仍单独设为灰色，以对应 LaTeX 的 {\\color{gray}...}。
   show math.equation: text.with(fill: gray)
-  it
+  text(fill: gray)[#it]
 }
 
 // \ii, \ee, \jj: 数学模式下正体 i, e, j
@@ -346,12 +361,19 @@
 
 // 致谢环境 (对应 acknowledgments 环境)
 #let acknowledgments(body) = {
-  v(0.8cm)
-  text(weight: "bold", size: 11pt)[致谢]
+  // 使用块级节前间距：接在正文后时与 revtex 的 section* 间距一致，
+  // 若致谢恰好另起一页，页面顶部会自动折叠这段间距。
+  block(above: 1.3cm)[
+    // 标题本身也与正文首行保持 2em 的首行缩进。
+    #h(2em)
+    #text(weight: "bold", size: 11pt)[致谢]
+  ]
+  // 保持标题到正文的原有距离，仅增加标题前的节间距。
   v(0.5cm)
   block(width: 100%)[
     #set text(size: 12pt, style: "normal")
-    #set par(first-line-indent: 2em)
+    // 与 LaTeX 一样，只有首行缩进 2em，续行回到正文左端。
+    #set par(first-line-indent: 0em)
     #h(2em)
     #body
   ]
