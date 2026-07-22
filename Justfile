@@ -24,6 +24,26 @@ check-init:
     TYPST_PACKAGE_PATH="$package_path" typst compile "$project_root/main.typ" "$project_root/main.pdf"
     echo "Initialized template compiled successfully: $project_root/main.pdf"
 
+# Validate files and metadata that are easy for the Universe bot to reject.
+check-release:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    for required in README.md LICENSE mplts.typ template/main.typ template/bibli.bib template/american-physics-society.csl images/firstpage.png; do
+        test -e "$required" || { echo "Missing release file: $required" >&2; exit 1; }
+    done
+    for required in template/bibli.bib template/american-physics-society.csl; do
+        basename="${required##*/}"
+        if rg -n --fixed-strings "\"$basename\"" typst.toml >/dev/null; then
+            echo "Release file is excluded by typst.toml: $required" >&2
+            exit 1
+        fi
+    done
+    while IFS= read -r link; do
+        test -e "$link" || { echo "README link target is missing: $link" >&2; exit 1; }
+    done < <(rg -o '\]\(\./[^)#]+' README.md | sed 's/^](//')
+    just check-init >/dev/null
+    echo "Release package checks passed."
+
 # Regenerate the Universe template preview from the initialized first page.
 firstpage:
     #!/usr/bin/env bash
@@ -49,6 +69,7 @@ publish:
         echo "Error: set TYPST_PACKAGES_REPO to your typst/packages checkout" >&2
         exit 1
     fi
+    just check-release
     destination="$packages_repo/packages/preview/$name/$version"
     if [[ -e "$destination" ]]; then
         echo "Error: destination already exists: $destination" >&2
