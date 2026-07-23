@@ -162,9 +162,9 @@
   // 交叉引用前缀本地化: \sectionautorefname = 小节
   set heading(supplement: "小节")
 
-  // revtex 的 heading 实际上带有首行缩进；编号与正文之间只有一个较窄的
-  // 编号栏。下面的尺寸按编译后的 PDF 基线和字框校准，不直接把 LaTeX
-  // 的 glue 数值机械换算成 Typst 的 block 参数。
+  // 一级标题从正文左边界开始，不继承正文的首行缩进；编号与标题之间
+  // 只有一个较窄的间隔。下面的尺寸按编译后的 PDF 基线和字框校准，
+  // 不直接把 LaTeX 的 glue 数值机械换算成 Typst 的 block 参数。
   // LaTeX 的标题前留白大于标题后的留白；后方间距保持原模板节奏。
   let heading-above = 1.3cm
   let heading-below = 1.0cm
@@ -174,8 +174,7 @@
   let heading-number-width = 1.5em
 
   show heading.where(level: 1): it => {
-    // revtex 的 section 与首行正文同起点，而不是贴页面文字边界。
-    block(inset: (left: 1.4em), above: heading-above, below: heading-below, breakable: false)[
+    block(inset: (left: 0pt), above: heading-above, below: heading-below, breakable: false)[
       #set text(weight: "bold", size: 11pt)
       #if it.numbering != none {
         context [#_heading-number(it) #h(1em)]
