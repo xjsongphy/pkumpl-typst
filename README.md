@@ -23,7 +23,7 @@ A Typst template for the *Modern Physics Laboratory* course at Peking University
 - **Revtex-Faithful Layout** — Matches `revtex4-2` preprint style for body 12pt, line spacing, heading spacing, and numbering
 - **Chinese Typography** — Roman/Sans/Mono mapped to Songti/Heiti/Fangsong with correct italic fallbacks; five font presets (`macos`, `windows`, `noto`, `notofandol`, `fandol`)
 - **APS Bibliography** — `apsrev4-2` style approximated via a bundled CSL file; native `.bib` reading
-- **Ruled Tables** — ordinary `table` elements automatically use the `ruledtabular` top-and-bottom double-line style without a cell grid; existing `ruled-table` wrappers remain compatible
+- **Ruled Tables** — ordinary `table` elements automatically use the `ruledtabular` top-and-bottom double-line style without a cell grid
 - **Frontmatter** — One `frontmatter(..)` call renders title, author, affiliation, date, abstract, and keywords; the abstract follows `mpltx.cls` with 11pt text, 400pt width, a 2em first-line indent, and an approximately 16.9pt baseline distance
 - **Colored Links** — Cross-references, citations, and URLs colored per the LaTeX `hyperref` defaults
 
@@ -140,10 +140,9 @@ Released under the [Creative Commons Attribution-ShareAlike 4.0 International](.
 With `#show: mplts.with(...)`, ordinary `table` elements receive double rules at
 the top and bottom. Use `table.hline()` for a header separator (0.4pt by default).
 Column sizing, alignment, merged cells, and repeated `table.header` rows remain
-available. Keep `figure(kind: table, ...)` for captions and references when the
-body contains a wrapper. Existing `ruled-table(table(...))` calls retain the same
-style without adding a second set of rules. An explicit `table(stroke: none, ...)`
-bypasses automatic wrapping for a custom layout. `grid` is unaffected.
+available. Use `figure(table(...), caption: [...])` for captions and references.
+An explicit `table(stroke: none, ...)` still receives the theme's double rules.
+`grid` is unaffected.
 
-Run `just check-tables` to compile ordinary, legacy, merged-cell, and multi-page
+Run `just check-tables` to compile ordinary, merged-cell, and multi-page
 regression examples, and `just check-release` to validate a fresh package init.

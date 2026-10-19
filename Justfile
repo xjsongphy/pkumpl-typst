@@ -94,13 +94,12 @@ publish:
     cp -R template images "$destination/"
     echo "Prepared $name v$version at $destination"
 
-# Compile regression examples for default, legacy, merged, and multi-page tables.
+# Compile regression examples for native, merged, and multi-page tables.
 check-tables:
     #!/usr/bin/env bash
     set -euo pipefail
     table_output="$(mktemp -d)"
     trap 'rm -rf "$table_output"' EXIT
     typst compile --root . tests/tables.typ "$table_output/tables.pdf"
-    typst compile --root . tests/long-table.typ "$table_output/long-auto.pdf"
-    typst compile --root . --input legacy=true tests/long-table.typ "$table_output/long-legacy.pdf"
+    typst compile --root . tests/long-table.typ "$table_output/long-table.pdf"
     echo "Table regression examples compiled successfully."
