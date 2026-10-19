@@ -47,20 +47,18 @@ $ #ee^(#ii#uppi) + 1 = 0. $ <eq1>
 
 = 结果及讨论
 
-此部分是报告主体, 应占篇幅一半以上. 实验结果应尽量以图表形式给出, 每个图表都应完整可读. 表格使用 `ruled-table` 生成首尾双横线 @tab:eg.
+此部分是报告主体, 应占篇幅一半以上. 实验结果应尽量以图表形式给出, 每个图表都应完整可读. 普通 `table` 默认生成首尾双横线 @tab:eg.
 
 #figure(
   kind: table,
   caption: [表格示例.],
-  ruled-table(
-    table(
-      columns: (1fr, 1fr, 1fr),
-      align: (center, center, right),
-      [物理量], [数值], [单位],
-      table.hline(stroke: 0.4pt),
-      [长度], [1.23], [mm],
-      [时间], [4.56], [ms],
-    )
+  table(
+    columns: (1fr, 1fr, 1fr),
+    align: (center, center, right),
+    [物理量], [数值], [单位],
+    table.hline(stroke: 0.4pt),
+    [长度], [1.23], [mm],
+    [时间], [4.56], [ms],
   ),
 ) <tab:eg>
 

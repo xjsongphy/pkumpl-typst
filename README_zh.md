@@ -23,7 +23,7 @@
 - **对齐 revtex 版式** — 正文 12pt、行距、标题间距与编号均按 `revtex4-2` 的 preprint 样式校准
 - **中文排版** — Roman/Sans/Mono 映射到宋体/黑体/仿宋，斜体回退正确；提供 `macos`、`windows`、`noto`、`notofandol`、`fandol` 五套字体预设
 - **APS 参考文献** — 通过内置 CSL 文件近似复现 `apsrev4-2`，Typst 原生读取 `.bib`
-- **双横线表格** — `ruled-table` 复现 `ruledtabular` 的首尾双横线风格
+- **双横线表格** — 普通 `table` 默认采用 `ruledtabular` 的首尾双横线风格, 去除单元格网格; 原有 `ruled-table` 包装保持兼容
 - **首页标题区** — 一个 `frontmatter(..)` 调用渲染标题/作者/单位/日期/摘要/关键词；摘要按 `mpltx.cls` 的 11pt、400pt 宽度、首行 2em 和约 16.9pt 基线间距实现
 - **彩色链接** — 交叉引用、文献引用、URL 按 LaTeX `hyperref` 默认值区分颜色
 
@@ -130,3 +130,15 @@ Commons Attribution-ShareAlike 3.0 许可证；它们仍受上游许可证约束
 [`revtex4-2`]: https://www.ctan.org/pkg/revtex
 [`fandol`]: https://www.ctan.org/pkg/fandol
 [`image`]: https://typst.app/docs/reference/visualize/image/
+
+### 默认表格样式
+
+使用 `#show: mplts.with(...)` 后, 普通 `table` 自动采用首尾双横线. 表头
+分隔线使用 `table.hline()` 指定, 默认线宽为 0.4pt. 列宽、对齐、合并单元格和
+`table.header` 跨页重复表头仍可使用. 表体带包装时, 仍用
+`figure(kind: table, ...)` 设置表题与交叉引用. 原有
+`ruled-table(table(...))` 不会重复添加横线. 单个表格可显式设置
+`table(stroke: none, ...)` 退出自动包装, 以便自行设计布局. `grid` 不受影响.
+
+运行 `just check-tables` 编译普通表格、旧包装、合并单元格和跨页回归示例;
+运行 `just check-release` 验证新建项目能否正常初始化与编译.

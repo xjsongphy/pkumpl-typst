@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- 普通 `table` 默认采用首尾双横线并去除网格, 无需额外包装; 保留旧 `ruled-table`、表题、引用、合并单元格和重复表头.
+- 更新示例和初始化模板, 增加 `just check-tables` 验证普通、旧包装及跨页表格.
+
 ## 2026-07-22 — v0.1.0
 
 - 使用 `unofficial-pku-mpl` 作为 Universe 包名；远程仓库名为 `pkumpl-typst`.

@@ -20,6 +20,7 @@ exclude = [
   "figgen.py",
   "CHANGELOG.md",
   "Justfile",
+  "tests",
   ".gitignore",
   "tmp",
 ]
